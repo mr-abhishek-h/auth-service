@@ -1,151 +1,154 @@
-🔐 Auth Service — Node.js, MongoDB, JWT
+# 🔐 Auth Service — Node.js, MongoDB, JWT
 
-A backend authentication service implementing secure user registration, login, JWT-based authentication, and role-based access control (RBAC).
+A backend authentication service implementing **secure user registration, login, JWT-based authentication, and role-based access control (RBAC)**.
 
-This project is designed with clean architecture, stateless auth, and security best practices.
+This project is designed with **clean architecture, stateless auth, and security best practices**, suitable for real-world backend systems and interviews.
 
-🚀 Features
+---
 
-User registration with hashed passwords (bcrypt)
+## 🚀 Features
 
-User login with JWT access tokens
+- User registration with hashed passwords (bcrypt)
+- User login with JWT access tokens
+- Stateless authentication using JWT
+- Authentication middleware
+- Role-Based Access Control (RBAC)
+- Protected and admin-only routes
+- MongoDB persistence using Mongoose
 
-Stateless authentication using JWT
+---
 
-Authorization middleware
+## 🧱 Tech Stack
 
-Role-Based Access Control (RBAC)
+- Node.js  
+- Express  
+- MongoDB  
+- Mongoose  
+- JSON Web Tokens (jsonwebtoken)  
+- bcrypt  
 
-Protected and admin-only routes
+---
 
-MongoDB persistence using Mongoose
+## 🧠 Architecture Overview
 
-🧱 Tech Stack
+- **Routes** → Define API endpoints  
+- **Controllers** → Handle business logic  
+- **Middleware** → Authentication & authorization  
+- **Models** → Database schemas  
+- **Config** → Environment variables & database setup  
 
-Node.js
+Authentication and authorization are **intentionally separated** to keep the system modular and scalable.
 
-Express
+---
 
-MongoDB
+## 🔑 Authentication Flow
 
-Mongoose
+### 1️⃣ Register
+- Validates input
+- Checks for duplicate users
+- Hashes password using bcrypt
+- Stores user securely in MongoDB
 
-JWT (jsonwebtoken)
+### 2️⃣ Login
+- Verifies email & password
+- Issues JWT access token
+- Token payload contains:
+  - `userId`
+  - `role`
 
-bcrypt
+### 3️⃣ Auth Middleware
+- Reads token from `Authorization: Bearer <token>`
+- Verifies JWT signature
+- Attaches user context to request
 
-🧠 Architecture Overview
+---
 
-Routes → define endpoints
-
-Controllers → handle business logic
-
-Middleware → authentication & authorization
-
-Models → data persistence
-
-Config → environment & database setup
-
-Authentication and authorization are intentionally separated for clarity and scalability.
-
-🔑 Authentication Flow
-1️⃣ Register
-
-Validates input
-
-Checks for duplicate users
-
-Hashes password using bcrypt
-
-Stores user securely in MongoDB
-
-2️⃣ Login
-
-Verifies email & password
-
-Issues JWT access token
-
-Token contains minimal payload:
-
-userId
-
-role
-
-3️⃣ Auth Middleware
-
-Reads JWT from Authorization: Bearer <token>
-
-Verifies token signature
-
-Attaches user context to request
-
-🛂 Authorization (RBAC)
+## 🛂 Authorization (RBAC)
 
 Role-based access control is enforced using middleware.
 
-Example:
+- `user` → normal access  
+- `admin` → privileged routes  
 
-user → normal access
+Authorization is applied **declaratively at the route level**, not inside business logic.
 
-admin → privileged routes
+---
 
-Authorization is declarative at the route level, not embedded in business logic.
+## 📌 API Endpoints
 
-📌 API Endpoints
-Register
+### Register
 POST /auth/register
 
-Login
+
+### Login
 POST /auth/login
 
-Protected Route
+### Protected Route
 GET /protected/me
 
-Admin-Only Route
+### Admin-Only Route
 GET /admin/dashboard
 
-🧪 Example CURL Commands
-Register
+
+---
+
+## 🧪 Example CURL Commands
+
+### Register
+```bash
 curl -X POST http://localhost:3000/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "password": "password123"
   }'
+```
 
-Login
+
+### Login 
+```bash
 curl -X POST http://localhost:3000/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "test@example.com",
     "password": "password123"
   }'
+```
 
-Access Protected Route
+### Access Protected Route
+
+```bash
 curl http://localhost:3000/protected/me \
   -H "Authorization: Bearer <TOKEN>"
+```
 
-Access Admin Route
+### Access Admin Route
+
+```bash
 curl http://localhost:3000/admin/dashboard \
   -H "Authorization: Bearer <ADMIN_TOKEN>"
+```
 
-🔒 Security Considerations
+### Security Considerations
 
-Passwords are never stored in plaintext
+- Passwords are never stored in plaintext
+- JWT payload contains no sensitive information
+- Same error message for invalid login attempts
+- Stateless authentication 
+- Secrets managed via environment variables
 
-JWT payload contains no sensitive data
+### Run Locally
 
-Same error message for invalid login attempts
-
-Stateless authentication (no sessions)
-
-Environment variables used for secrets
-
-▶️ Run Locally
+```bash
 npm install
 npm run dev
+```
 
+### Ensure MongoDB is running locally
 
-Ensure MongoDB is running locally:
-
+```bash
 mongodb://localhost:27017/auth_service
+```
+
+
+
